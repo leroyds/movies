@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- title  block -->
+
+{% block title %}
+    {{post.title}}
+{% endblock %}
+
+<!-- end of title block -->
+
+
+{%  block content %}
+
+<!-- movie detail -->
+<div>
+	<p class="display-5"><a href="{% url 'post:list'%}">Back</a> </p>
+	<p class='display-1 text-center'>{{post.title}}</p>
+	<div class="row">
+		<img src="{{post.image.url}}" alt="" class="col-3">
+		<div class="col-9">
+			<p class="lead">{{post.description}}</p>
+			<p class="font-italic">Release date: {{post.release_date}}</p> 
+		</div>       
+	</div>
+</div>
+<!-- end of movie detail block -->
+
+<hr>
+
+<!-- comment section -->
+
+	<!-- comment count -->
+	<p><span class="badge badge-pill badge-light">{{comments.count}} comment{{comments.count|pluralize}}</span> </p>
+
+	<!-- comment list -->
+	{%for commentInfo in comments%}
+	<div class="col-12 border bg-light mb-1">
+		<h4 class="text-monospace">{{commentInfo.comment_title}}  <span class="badge badge-pill badge-warning">(Ratings:{{commentInfo.ratings}})</span></h4>
+		<p class="lead">{{commentInfo.body|linebreaks}}</p>
+		<p>
+			comment {{forloop.count}} by <span class="badge badge-pill badge-dark">{{commentInfo.user_obj}}</span> <span class="font-italic">dated:{{commentInfo.updated_date}}</span>  
+		</p>
+	</div>
+	{%endfor%}
+
+	{%if comments.empty%}
+	<p>There are no comments yet.</p>
+	{%endif%}
+
+	{% if comment_added %}
+	<h3>Your comment has been added.</h3>
+	{%endif%}
+
+<hr>
+
+<div>
+    <h2>Add a new comment</h2>
+	<form method="post" action="{{post.get_absolute_url}}">
+		{{ comment_form.as_p }}
+		{% csrf_token %}
+		<p><input type="submit" value="Add Comment"></p>
+	</form>
+</div>
+
+<hr>
+
+<!-- Related post -->
+
+<div class="related_post">
+	<h2>
+		SIMILAR POSTS
+	</h2>
+	{%if related_blogs.empty%}
+		There are no similar posts yet.
+    {%endif%}
+
+	{%for similar_blog in related_blogs%}
+	<div>
+        <p class="related_post">
+		<h4>
+             <a href="{{similar_blog.get_absolute_url }}">{{similar_blog.title}}</a> 
+		</h4>       Genre:
+			{%for tagInfo in similar_blog.tags.all%}
+			<a href="{%url 'post:list_slug' tag_slug=tagInfo.slug %}">{{tagInfo.name}}</a>
+			{%endfor%}
+		</p>
+	</div>	
+	{%endfor%}
+</div>
+
+<!-- end of related post -->
+
+{% endblock %}
