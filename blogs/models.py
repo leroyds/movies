@@ -18,6 +18,7 @@ class Post(models.Model):
     status          = models.CharField(default='A', max_length=50,choices=POST_STATUS)
     tags            = TaggableManager()
     
+
     def __str__(self):
         return self.title
     
@@ -35,8 +36,8 @@ class CommentManager(models.Manager):
     def get_comment_or_empty_comment_form(self,post,user):
         try:
             return Comment.objects.get(post_obj=post,user_obj=user)
-        except:
-            return Comment(post_obj=post,user_obj=user)
+        except Comment.DoesNotExist:
+            return Comment.setComment(post_obj=post,user_obj=user)
 
 
 class Comment(models.Model):
@@ -48,7 +49,11 @@ class Comment(models.Model):
     created_date    = models.DateTimeField( auto_now_add=True)
     updated_date    = models.DateTimeField(auto_now=True)
     comment_status  = models.BooleanField(default=True)
-    objects=CommentManager()
+    objects         = CommentManager()
+    
+    @classmethod
+    def setComment(self, post_obj,user_obj):
+        return self(post_obj=post_obj, user_obj=user_obj)
 
     class Meta:
         ordering = ['-updated_date','-ratings']

@@ -7,9 +7,12 @@ from django.conf import settings
 app_name = 'post'
 
 urlpatterns = [
-    path('',views.MovieList.as_view(),name='list'),
+    url(r'post_key/(?P<movie_id>[\d]+)/comment/$',views.CreateCommentView.as_view(),name='CreateComment'),
+    url(r'post_key/(?P<movie_id>[\d]+)/comment/(?P<pk>[\d]+)/$',views.UpdateCommentView.as_view(),name='UpdateComment'),
     path('post_key/<int:pk>/',views.MovieDetailView.as_view(),name='detail_pk'),
     url(r'^post/(?P<tag_slug>[-\w]+)/$',views.MovieList.as_view(),name='list_slug'),
+    path('',views.MovieList.as_view(),name='list'),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()

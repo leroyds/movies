@@ -14,7 +14,7 @@ class create_comment(forms.ModelForm):
 		disabled=True,
 		queryset=models.Post.objects.all()
 	)
-	user_obj=forms.ModelChoiceFields(
+	user_obj=forms.ModelChoiceField(
 		widget=forms.HiddenInput,
 		disabled=True,
 		queryset=User.objects.all()

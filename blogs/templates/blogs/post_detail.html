@@ -53,16 +53,18 @@
 	{%endif%}
 
 <hr>
-
-<div>
+{%if comment_form%}
+	<div>
     <h2>Add a new comment</h2>
-	<form method="post" action="{{post.get_absolute_url}}">
+	<form method="post" action="{{comment_form_url}}">
 		{{ comment_form.as_p }}
 		{% csrf_token %}
 		<p><input type="submit" value="Add Comment"></p>
 	</form>
-</div>
-
+	</div>
+{%else%}
+	<p >Log in to vote for this movie</p >
+{%endif%}
 <hr>
 
 <!-- Related post -->
