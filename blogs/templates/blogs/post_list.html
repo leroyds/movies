@@ -6,7 +6,7 @@
 {% block content %}
     <div class='row'>
     {% for post in post_list %}
-        <div class="col-4 my-4 border">
+        <div class="col-4 mt-4 border">
             <h3 class=""><a href="{{ post.get_absolute_url }}">{{post.title}}</a></h3>
             <img src="{{post.image.url}}" alt="article image">
             <p class="">Release Date: {{post.release_date}}</p>
