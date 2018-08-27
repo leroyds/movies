@@ -55,7 +55,7 @@ class MovieDetailView(DetailView):
                 comment_form_url = reverse(
                     'post:UpdateComment',
                     kwargs={
-                        'movie_id': self.object.id,
+                        'movie_id': commentFormInfo.post_obj.id,
                         'pk': commentFormInfo.id
                         })
             else:
@@ -77,24 +77,20 @@ class CreateCommentView(LoginRequiredMixin,CreateView):
 
     def get_initial(self):
          initial=super().get_initial()
-         initial['user']=self.request.user.id
-         initial['post']=self.kwargs['movie_id']
+         initial['user_obj']=self.request.user.id
+         initial['post_obj']=self.kwargs['movie_id']
          return initial
 
     def render_to_response(self,context,**kwargs):
-        movie_id=context['object'].id 
+        # import pdb
+        # pdb.set_trace()
+        movie_id=int(context['form']['post_obj'].value().__str__())
         movie_detail_url=reverse('post:detail_pk', kwargs={'pk':movie_id})
         return redirect(to=movie_detail_url)
 
     def get_success_url(self):
-        movie_Id=self.object.post.id 
-        return redirect('post:detail_pk',kwargs={'pk':movie_Id})
-
-    # def form_valid(self,form):
-    #     obj=form.save(commit=False)
-    #     obj.save()
-    #     return HttpResponseRedirect(reverse('post:list'))
-
+        movie_id = self.object.post_obj.id 
+        return reverse('post:detail_pk', kwargs={'pk':movie_id})
 
 
 class UpdateCommentView(LoginRequiredMixin,UpdateView):
@@ -108,13 +104,14 @@ class UpdateCommentView(LoginRequiredMixin,UpdateView):
         return CommentInfo
 
     def render_to_response(self,context,**kwargs):
+        print(context)
         movie_id=context['object'].id 
         movie_detail_url=reverse('post:detail_pk',kwargs={'pk':movie_id})
         return redirect(to=movie_detail_url)
 
     def get_success_url(self):
-        movie_Id=self.object.post.id
-        return reverse('post:detail_pk',kwargs={'pk',movie_Id})
+        movie_id=self.object.post_obj.id
+        return reverse('post:detail_pk',kwargs={'pk':movie_id})
 
 
 
