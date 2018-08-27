@@ -1,4 +1,5 @@
 {% extends 'base.html'%}
+{%load custom_tags%}
 
 {% block title %}Movie Reviews{% endblock %}
 
@@ -9,7 +10,13 @@
             <h3 class=""><a href="{{ post.get_absolute_url }}">{{post.title}}</a></h3>
             <img src="{{post.image.url}}" alt="article image">
             <p class="">Release Date: {{post.release_date}}</p>
-            <p>Ratings:0/5</p>
+            {%AVERAGE_RATINGS post.pk as AVERAGE%}
+            <p>Ratings:
+                {%if AVERAGE.avg_rating%}
+                {{AVERAGE.avg_rating}}</p>
+                {%else%}
+                0
+                {%endif%}
             <p>Genre: 
                     {% for tag in post.tags.all %}
                     <a href="{% url 'post:list_slug' tag_slug=tag.slug %}">
@@ -27,13 +34,3 @@
     </div>
     {%include 'pagination.html' with page=page_obj%}
 {% endblock %}
-
-<!-- <div class="row">
-        {%for article in articles%}
-            <div class='col-4 my-4'>
-                <h1 class='display-5'><a href="{% url 'articles:detail' slug=article.slug %}">{{article.title}}</a></h1>
-                <p>{{article.body|truncatewords:10}}</p>
-                <h6>{{article.date}}</h6>
-            </div>
-        {%endfor%}
-    </div> -->
