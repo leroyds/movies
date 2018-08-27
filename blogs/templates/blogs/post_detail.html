@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<!-- head block  -->
+
+{% block head %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+{% endblock %}
+
 <!-- title  block -->
 
 {% block title %}
@@ -14,7 +20,9 @@
 
 <!-- movie detail -->
 <div>
-	<p class="display-5"><a href="{% url 'post:list'%}">Back</a> </p>
+	
+	<p class="display-5 arrow-circle-left"><a href="{% url 'post:list'%}"><i class="fas fa-arrow-circle-left"></i></a> </p>
+
 	<p class='display-1 text-center'>{{post.title}}</p>
 	<div class="row">
 		<img src="{{post.image.url}}" alt="" class="col-3">
@@ -63,7 +71,16 @@
 	</form>
 	</div>
 {%else%}
-	<p >Log in to vote for this movie</p >
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		<strong>Hey! </strong>
+		<a href="{% url 'accounts:login' %}">Login</a> or 
+		<a href="{% url 'accounts:signup' %}">Signup</a>  
+		to review this movie :)
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		  <span aria-hidden="true">&times;</span>
+		</button>
+	  </div>
+	
 {%endif%}
 <hr>
 
@@ -73,21 +90,23 @@
 	<h2>
 		SIMILAR POSTS
 	</h2>
-	{%if related_blogs.empty%}
+	{%if similar_blog not in related_blogs%}
 		There are no similar posts yet.
     {%endif%}
 
 	{%for similar_blog in related_blogs%}
-	<div>
-        <p class="related_post">
-		<h4>
-             <a href="{{similar_blog.get_absolute_url }}">{{similar_blog.title}}</a> 
-		</h4>       Genre:
-			{%for tagInfo in similar_blog.tags.all%}
-			<a href="{%url 'post:list_slug' tag_slug=tagInfo.slug %}">{{tagInfo.name}}</a>
-			{%endfor%}
-		</p>
-	</div>	
+
+	<div class="card" style="width: 18rem;">
+			<div class="card-body">
+			  <h5 class="card-title"><a href="{{similar_blog.get_absolute_url }}">{{similar_blog.title}}</a></h5>
+			  <h6 class="card-subtitle mb-2 text-muted">{{similar_blog.ratings}}</h6>
+			  <p class="card-text">{{similar_blog.description|truncatewords:17}}</p>
+			  	{%for tagInfo in similar_blog.tags.all%}
+				<a href="{%url 'post:list_slug' tag_slug=tagInfo.slug %}">{{tagInfo.name}}</a>
+				{%endfor%}
+			</div>
+		  </div>
+		  
 	{%endfor%}
 </div>
 
