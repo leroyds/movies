@@ -1,6 +1,6 @@
 from django.db.models import Avg
 from django import template
-from ..models import Post
+from ..models import Post,Comment
 
 register=template.Library()
 
@@ -17,3 +17,8 @@ def get_avg_ratings(pk):
 def most_recent_added_movies(count=5):
     latest_posts= Post.objects.all().order_by('-created_date')[:count]
     return {'latest_posts':latest_posts}
+
+@register.inclusion_tag("blogs/recently_commented_posts.html")
+def recently_commented(userId,count=5):
+    recent=Comment.objects.filter(user_obj=userId).order_by('-updated_date')[:count]
+    return{'recent':recent}
