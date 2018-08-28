@@ -88,6 +88,10 @@
             <p>Added {% TotalPosts %} Movies so far.</p>
             <h3>Latest posts</h3>
             {% most_recent_added_movies %}
+            <br>
+            {%if user.is_authenticated%}
+            {%recently_commented user.id%}
+            {%endif%}
           {%endblock%}
           </div>
 
