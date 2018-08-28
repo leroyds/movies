@@ -1,5 +1,8 @@
 {% extends 'base.html'%}
+{% load static%}
 {%load custom_tags%}
+
+{% load ratings %}
 
 {% block title %}Movie Reviews{% endblock %}
 
@@ -11,9 +14,12 @@
             <img src="{{post.image.url}}" alt="article image">
             <p class="">Release Date: {{post.release_date}}</p>
             {%AVERAGE_RATINGS post.pk as AVERAGE%}
+            
             <p>Ratings:
+                    {% ratings post %}
                 {%if AVERAGE.avg_rating%}
                 {{AVERAGE.avg_rating}}</p>
+                
                 {%else%}
                 0
                 {%endif%}
