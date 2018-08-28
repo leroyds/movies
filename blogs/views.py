@@ -7,6 +7,8 @@ from .forms import create_comment
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
+
 from . import models
 
 
@@ -18,12 +20,22 @@ class MovieList(ListView):
         context=super().get_context_data(**kwargs)
         tag=None
         tag=self.kwargs.get('tag_slug')
-        print(tag)
         if tag:
             tag=get_object_or_404(Tag,slug=tag)
             context['post_list']=self.model.objects.filter(tags__in=[tag])
         else:
             context['post_list']= self.model.objects.all()
+
+        ############## Pagination block    
+        paginating=Paginator(context['post_list'],3)
+        page=self.request.GET.get('page')
+        try:
+            context['post_list']=paginating.page(page)
+        except PageNotAnInteger:
+            context['post_list']=paginating.page(1)
+        except EmptyPage:
+            context['post_list']=paginating.page(paginating.num_pages)
+        ############################
         return context
 
 
