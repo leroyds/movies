@@ -15,7 +15,7 @@
             <p class="text-center text-justify">Release Date: {{post.release_date}}</p>
             {%AVERAGE_RATINGS post.pk as AVERAGE%}
             
-            <p>Ratings:
+            <p class='text-center'>Ratings:
                     {% ratings post %}
                 {%if AVERAGE.avg_rating%}
                 {{AVERAGE.avg_rating}}</p>
