@@ -21,4 +21,4 @@ def most_recent_added_movies(count=5):
 @register.inclusion_tag("blogs/recently_commented_posts.html")
 def recently_commented(userId,count=5):
     recent=Comment.objects.filter(user_obj=userId).order_by('-updated_date')[:count]
-    return{'recent':recent}
+    return {'recent':recent}

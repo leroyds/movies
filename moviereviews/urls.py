@@ -21,5 +21,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('blogs.urls')),
     path('account/',include('accounts.urls')),
-    url(r'^ratings/', include('star_ratings.urls', namespace='ratings')),
 ]
