@@ -8,14 +8,14 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
-
 from . import models
 
 
 class MovieList(ListView):
-    model = models.Post
     paginate_by=3
-    
+    model = models.Post
+    filterset_class = MovieFilter
+
     def get_context_data(self,**kwargs):
         context=super().get_context_data(**kwargs)
         tag=None
@@ -26,7 +26,9 @@ class MovieList(ListView):
         else:
             context['post_list']= self.model.objects.all()
 
-        ############## Pagination block    
+        user_filter = MovieFilter(self.request.GET, queryset=context['post_list'])
+        context['post_list'] = user_filter.qs
+        ############## Pagination block 
         paginating=Paginator(context['post_list'],3)
         page=self.request.GET.get('page')
         try:
