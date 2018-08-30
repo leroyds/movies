@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+{%load custom_tags%}
+
+<!-- css -->
+{%block style%}
+<link rel="stylesheet" href="{%static 'blogs/css/style.css'%}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+{%endblock style%}
 
 <!-- head block  -->
 
@@ -31,8 +38,27 @@
 			<p class="font-italic">Release date: {{post.release_date}}</p> 
 		</div>       
 	</div>
+	
 </div>
 <!-- end of movie detail block -->
+
+<hr>
+
+<!-- average star rating -->
+<div class="bg-dark">
+		{%AVERAGE_RATINGS post.pk as AVERAGE%}
+		<p class="text-white font-weight-bold pl-2 pt-1  inline">{%if AVERAGE.avg_rating%}{{AVERAGE.avg_rating}}
+		{%else%}0{%endif%}</p>
+		<input type="hidden" id="myVar" name="variable" value="{%if AVERAGE.avg_rating%}{{AVERAGE.avg_rating}}{%else%}0{%endif%}">
+		<div class="inline">
+			<div class="stars-outer">
+				<div class="stars-inner"></div>
+			</div>
+		</div>
+		
+			<span class="number-rating"></span>
+</div>
+<!-- end of average star rating -->
 
 <hr>
 
@@ -42,9 +68,25 @@
 	<p><span class="badge badge-pill badge-light">{{comments.count}} comment{{comments.count|pluralize}}</span> </p>
 
 	<!-- comment list -->
+	<input type="hidden" id="commentsObject" name="variable" value="{{comments}}">
 	{%for commentInfo in comments%}
 	<div class="col-12 border bg-light mb-1">
-		<h4 class="text-monospace">{{commentInfo.comment_title}}  <span class="badge badge-pill badge-warning">(Ratings:{{commentInfo.ratings}})</span></h4>
+		{{commentInfo.pk}}
+		
+		
+		<div class="bg-dark text-light">
+			<h4 class="text-monospace">{{commentInfo.comment_title}}  <span class="badge badge-pill badge-warning">(Ratings:{{commentInfo.ratings}})</span></h4>
+			<!-- javascript pass -->
+			<input type="hidden" id="userCommentRatingValue" name="variable" value="{{commentInfo.ratings}}">
+			<input type="hidden" id="userCommentRatingPK" name="variable" value="{{commentInfo.user_obj}}">
+		
+		<div class='{{commentInfo.user_obj}}'>
+			<div class="stars-outer">
+				<div class="stars-inner"></div>
+			</div>
+		</div>
+		</div>
+
 		<p class="lead">{{commentInfo.body|linebreaks}}</p>
 		<p>
 			comment {{forloop.count}} by <span class="badge badge-pill badge-dark">{{commentInfo.user_obj}}</span> <span class="font-italic">dated:{{commentInfo.updated_date}}</span>  
@@ -113,3 +155,7 @@
 <!-- end of related post -->
 
 {% endblock %}
+
+{%block script%}
+<script src="{%static 'blogs/js/script.js'%}"></script>
+{%endblock script%}
