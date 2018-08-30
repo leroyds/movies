@@ -16,6 +16,7 @@
             <p class='text-center'>Ratings:
                 {%if AVERAGE.avg_rating%}{{AVERAGE.avg_rating}}
                 {%else%}0{%endif%}</p>
+                <input type="hidden" id="myVar" name="variable" value="{{ AVERAGE.avg_rating}}">
             <p class="text-center">Genre: 
                     {% for tag in post.tags.all %}
                     <a href="{% url 'post:list_slug' tag_slug=tag.slug %}">
@@ -34,3 +35,6 @@
 
     {%include 'pagination.html' with page=page_obj%}
 {% endblock %}
+{%block script%}
+<script src="{%static 'blogs/js/script.js'%}"></script>
+{%endblock script%}
