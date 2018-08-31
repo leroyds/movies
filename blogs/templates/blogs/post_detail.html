@@ -67,8 +67,17 @@
 	<!-- comment count -->
 	<p><span class="badge badge-pill badge-light">{{comments.count}} comment{{comments.count|pluralize}}</span> </p>
 
+
+
+
+
+
 	<!-- comment list -->
-	<input type="hidden" id="commentsObject" name="variable" value="{{comments}}">
+	<input type="hidden" id="commentsCount" name="variable" value="{{comments}}">
+	<script>
+		commentRating=[];
+		commentRatingPk=[];
+	</script>
 	{%for commentInfo in comments%}
 	<div class="col-12 border bg-light mb-1">
 		{{commentInfo.pk}}
@@ -92,7 +101,30 @@
 			comment {{forloop.count}} by <span class="badge badge-pill badge-dark">{{commentInfo.user_obj}}</span> <span class="font-italic">dated:{{commentInfo.updated_date}}</span>  
 		</p>
 	</div>
+
+
+
+	<script>
+		value={{commentInfo.ratings}};
+		pk="{{commentInfo.user_obj}}";
+		pk=pk.toString();
+		commentRating.push(value);
+		commentRatingPk.push(pk);
+		
+	</script>
+
+
+
 	{%endfor%}
+
+
+
+	<script>
+		// console.log(d)
+	</script>
+	<input type="hidden" id='jspass' name='variable' value=`${d}%`>
+
+
 
 	{%if comments.empty%}
 	<p>There are no comments yet.</p>
@@ -157,5 +189,5 @@
 {% endblock %}
 
 {%block script%}
-<script src="{%static 'blogs/js/script.js'%}"></script>
+<script src="{%static 'blogs/js/script_details.js'%}"></script>
 {%endblock script%}
