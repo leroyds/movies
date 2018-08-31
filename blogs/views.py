@@ -14,7 +14,6 @@ from . import models
 class MovieList(ListView):
     paginate_by=3
     model = models.Post
-    filterset_class = MovieFilter
 
     def get_context_data(self,**kwargs):
         context=super().get_context_data(**kwargs)
@@ -26,8 +25,6 @@ class MovieList(ListView):
         else:
             context['post_list']= self.model.objects.all()
 
-        user_filter = MovieFilter(self.request.GET, queryset=context['post_list'])
-        context['post_list'] = user_filter.qs
         ############## Pagination block 
         paginating=Paginator(context['post_list'],3)
         page=self.request.GET.get('page')
