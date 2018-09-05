@@ -7,9 +7,9 @@
 {% block content %}
     <div class='row'>
     {% for post in post_list %}
-        <div class="col-4 mt-4 border">
+        <div class="col-12 col-lg-6 col-xl-4 mt-4 border">
             <h3 class="text-center text-justify"><a href="{{ post.get_absolute_url }}">{{post.title}}</a></h3>
-            <img src="{{post.image.url}}" alt="article image" class="rounded mx-auto d-block .img-fluid. max-width:100%; height:auto;" width="150" height="300">
+            <img src="{{post.image.url}}" alt="article image" class="rounded mx-auto d-block img-fluid max-width:100% height:auto" >
             <p class="text-center text-justify">Release Date: {{post.release_date}}</p>
             {%AVERAGE_RATINGS post.pk as AVERAGE%}
             
