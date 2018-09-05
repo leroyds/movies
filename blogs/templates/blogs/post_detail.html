@@ -25,166 +25,169 @@
 
 {%  block content %}
 
-<!-- movie detail -->
+<div class="col-12">
+	<!-- movie detail -->
 <div>
 	
-	<p class="display-5 arrow-circle-left"><a href="{% url 'post:list'%}"><i class="fas fa-arrow-circle-left"></i></a> </p>
-
-	<p class='display-1 text-center'>{{post.title}}</p>
-	<div class="row">
-		<img src="{{post.image.url}}" alt="" class="col-3">
-		<div class="col-9">
-			<p class="lead">{{post.description}}</p>
-			<p class="font-italic">Release date: {{post.release_date}}</p> 
-		</div>       
-	</div>
+		<p class="display-5 arrow-circle-left"><a href="{% url 'post:list'%}"><i class="fas fa-arrow-circle-left"></i></a> </p>
 	
-</div>
-<!-- end of movie detail block -->
-
-<hr>
-
-<!-- average star rating -->
-<div class="bg-dark">
-		{%AVERAGE_RATINGS post.pk as AVERAGE%}
-		<p class="text-white font-weight-bold pl-2 pt-1  inline">{%if AVERAGE.avg_rating%}{{AVERAGE.avg_rating}}
-		{%else%}0{%endif%}</p>
-		<input type="hidden" id="myVar" name="variable" value="{%if AVERAGE.avg_rating%}{{AVERAGE.avg_rating}}{%else%}0{%endif%}">
-		<div class="inline">
-			<div class="stars-outer">
-				<div class="stars-inner"></div>
-			</div>
+		<p class='display-1 text-center'>{{post.title}}</p>
+		<div class="row">
+			<img src="{{post.image.url}}" alt="" class="col-10 col-sm-6 col-md-4 img-fluid height:auto">
+			<div class="col-12 col-md-8 col-sm-6">
+				<p class="lead">{{post.description}}</p>
+				<p class="font-italic">Release date: {{post.release_date}}</p> 
+			</div>       
 		</div>
 		
-			<span class="number-rating"></span>
-</div>
-<!-- end of average star rating -->
-
-<hr>
-
-<!-- comment section -->
-
-	<!-- comment count -->
-	<p><span class="badge badge-pill badge-light">{{comments.count}} comment{{comments.count|pluralize}}</span> </p>
-
-
-
-
-
-
-	<!-- comment list -->
-	<input type="hidden" id="commentsCount" name="variable" value="{{comments}}">
-	<script>
-		commentRating=[];
-		commentRatingPk=[];
-	</script>
-	{%for commentInfo in comments%}
-	<div class="col-12 border bg-light mb-1">
-		{{commentInfo.pk}}
-		
-		
-		<div class="bg-dark text-light">
-			<h4 class="text-monospace">{{commentInfo.comment_title}}  <span class="badge badge-pill badge-warning">(Ratings:{{commentInfo.ratings}})</span></h4>
-			<!-- javascript pass -->
-			<input type="hidden" id="userCommentRatingValue" name="variable" value="{{commentInfo.ratings}}">
-			<input type="hidden" id="userCommentRatingPK" name="variable" value="{{commentInfo.user_obj}}">
-		
-		<div class='{{commentInfo.user_obj}}'>
-			<div class="stars-outer">
-				<div class="stars-inner"></div>
-			</div>
-		</div>
-		</div>
-
-		<p class="lead">{{commentInfo.body|linebreaks}}</p>
-		<p>
-			comment {{forloop.count}} by <span class="badge badge-pill badge-dark">{{commentInfo.user_obj}}</span> <span class="font-italic">dated:{{commentInfo.updated_date}}</span>  
-		</p>
 	</div>
-
-
-
-	<script>
-		value={{commentInfo.ratings}};
-		pk="{{commentInfo.user_obj}}";
-		pk=pk.toString();
-		commentRating.push(value);
-		commentRatingPk.push(pk);
-		
-	</script>
-
-
-
-	{%endfor%}
-
-
-
-	<script>
-		// console.log(d)
-	</script>
-	<input type="hidden" id='jspass' name='variable' value=`${d}%`>
-
-
-
-	{%if comments.empty%}
-	<p>There are no comments yet.</p>
-	{%endif%}
-
-	{% if comment_added %}
-	<h3>Your comment has been added.</h3>
-	{%endif%}
-
-<hr>
-{%if comment_form%}
-	<div>
-    <h2>Add a new comment</h2>
-	<form method="post" action="{{comment_form_url}}">
-		{{ comment_form.as_p }}
-		{% csrf_token %}
-		<p><input type="submit" value="Add Comment"></p>
-	</form>
-	</div>
-{%else%}
-	<div class="alert alert-warning alert-dismissible fade show" role="alert">
-		<strong>Hey! </strong>
-		<a href="{% url 'accounts:login' %}">Login</a> or 
-		<a href="{% url 'accounts:signup' %}">Signup</a>  
-		to review this movie :)
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-		  <span aria-hidden="true">&times;</span>
-		</button>
-	  </div>
+	<!-- end of movie detail block -->
 	
-{%endif%}
-<hr>
-
-<!-- Related post -->
-
-<div class="related_post">
-	<h2>
-		SIMILAR POSTS
-	</h2>
-	{%if similar_blog not in related_blogs%}
-		There are no similar posts yet.
-    {%endif%}
-
-	{%for similar_blog in related_blogs%}
-
-	<div class="card" style="width: 18rem;">
-			<div class="card-body">
-			  <h5 class="card-title"><a href="{{similar_blog.get_absolute_url }}">{{similar_blog.title}}</a></h5>
-			  <h6 class="card-subtitle mb-2 text-muted">{{similar_blog.ratings}}</h6>
-			  <p class="card-text">{{similar_blog.description|truncatewords:17}}</p>
-			  	{%for tagInfo in similar_blog.tags.all%}
-				<a href="{%url 'post:list_slug' tag_slug=tagInfo.slug %}">{{tagInfo.name}}</a>
-				{%endfor%}
+	<hr>
+	
+	<!-- average star rating -->
+	<div class="bg-dark">
+			{%AVERAGE_RATINGS post.pk as AVERAGE%}
+			<p class="text-white font-weight-bold pl-2 pt-1  inline">{%if AVERAGE.avg_rating%}{{AVERAGE.avg_rating}}
+			{%else%}0{%endif%}</p>
+			<input type="hidden" id="myVar" name="variable" value="{%if AVERAGE.avg_rating%}{{AVERAGE.avg_rating}}{%else%}0{%endif%}">
+			<div class="inline">
+				<div class="stars-outer">
+					<div class="stars-inner"></div>
+				</div>
 			</div>
+			
+				<span class="number-rating"></span>
+	</div>
+	<!-- end of average star rating -->
+	
+	<hr>
+	
+	<!-- comment section -->
+	
+		<!-- comment count -->
+		<p><span class="badge badge-pill badge-light">{{comments.count}} comment{{comments.count|pluralize}}</span> </p>
+	
+	
+	
+	
+	
+	
+		<!-- comment list -->
+		<input type="hidden" id="commentsCount" name="variable" value="{{comments}}">
+		<script>
+			commentRating=[];
+			commentRatingPk=[];
+		</script>
+		{%for commentInfo in comments%}
+		<div class="col-12 border bg-light mb-1">
+			{{commentInfo.pk}}
+			
+			
+			<div class="bg-dark text-light">
+				<h4 class="text-monospace">{{commentInfo.comment_title}}  <span class="badge badge-pill badge-warning">(Ratings:{{commentInfo.ratings}})</span></h4>
+				<!-- javascript pass -->
+				<input type="hidden" id="userCommentRatingValue" name="variable" value="{{commentInfo.ratings}}">
+				<input type="hidden" id="userCommentRatingPK" name="variable" value="{{commentInfo.user_obj}}">
+			
+			<div class='{{commentInfo.user_obj}}'>
+				<div class="stars-outer">
+					<div class="stars-inner"></div>
+				</div>
+			</div>
+			</div>
+	
+			<p class="lead">{{commentInfo.body|linebreaks}}</p>
+			<p>
+				comment {{forloop.count}} by <span class="badge badge-pill badge-dark">{{commentInfo.user_obj}}</span> <span class="font-italic">dated:{{commentInfo.updated_date}}</span>  
+			</p>
+		</div>
+	
+	
+	
+		<script>
+			value={{commentInfo.ratings}};
+			pk="{{commentInfo.user_obj}}";
+			pk=pk.toString();
+			commentRating.push(value);
+			commentRatingPk.push(pk);
+			
+		</script>
+	
+	
+	
+		{%endfor%}
+	
+	
+	
+		<script>
+			// console.log(d)
+		</script>
+		<input type="hidden" id='jspass' name='variable' value=`${d}%`>
+	
+	
+	
+		{%if comments.empty%}
+		<p>There are no comments yet.</p>
+		{%endif%}
+	
+		{% if comment_added %}
+		<h3>Your comment has been added.</h3>
+		{%endif%}
+	
+	<hr>
+	{%if comment_form%}
+		<div>
+		<h2>Add a new comment</h2>
+		<form method="post" action="{{comment_form_url}}">
+			{{ comment_form.as_p }}
+			{% csrf_token %}
+			<p><input type="submit" value="Add Comment"></p>
+		</form>
+		</div>
+	{%else%}
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+			<strong>Hey! </strong>
+			<a href="{% url 'accounts:login' %}">Login</a> or 
+			<a href="{% url 'accounts:signup' %}">Signup</a>  
+			to review this movie :)
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
 		  </div>
-		  
-	{%endfor%}
-</div>
+		
+	{%endif%}
+	<hr>
+	
+	<!-- Related post -->
+	
+	<div class="related_post">
+		<h2>
+			SIMILAR POSTS
+		</h2>
+		{%if similar_blog not in related_blogs%}
+			There are no similar posts yet.
+		{%endif%}
+	
+		{%for similar_blog in related_blogs%}
+	
+		<div class="card" style="width: 18rem;">
+				<div class="card-body">
+				  <h5 class="card-title"><a href="{{similar_blog.get_absolute_url }}">{{similar_blog.title}}</a></h5>
+				  <h6 class="card-subtitle mb-2 text-muted">{{similar_blog.ratings}}</h6>
+				  <p class="card-text">{{similar_blog.description|truncatewords:17}}</p>
+					  {%for tagInfo in similar_blog.tags.all%}
+					<a href="{%url 'post:list_slug' tag_slug=tagInfo.slug %}">{{tagInfo.name}}</a>
+					{%endfor%}
+				</div>
+			  </div>
+			  
+		{%endfor%}
+	</div>
+	
+	<!-- end of related post -->
 
-<!-- end of related post -->
+</div>
 
 {% endblock %}
 
